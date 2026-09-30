@@ -8,7 +8,10 @@ API key required.
 ## How it works
 
 1. **Geocode** — the city name is resolved to latitude/longitude via
-   Open-Meteo's geocoding API (first match is used).
+   Open-Meteo's geocoding API. Exact name matches are preferred over fuzzy
+   ones (so "Goa" isn't read as Genoa), an optional `, Country` or `, State`
+   suffix narrows the match, and a few popular regions that aren't towns
+   (Goa, Kerala, Coorg, Kashmir) map to a representative town.
 2. **Forecast** — a daily forecast (min/max temperature, precipitation) is
    fetched for the requested number of days.
 
@@ -18,8 +21,11 @@ API key required.
 |---|---|---|
 | `get_forecast` | Weather forecast for a city | `city: str`, `days: int = 3` |
 
-`days` is clamped to the range 1–7. `city` is a free-text city name, e.g.
-`"Hyderabad"`.
+`days` is clamped to the range 1–7. `city` is a free-text city name,
+optionally with a country (name or 2-letter code) or state to disambiguate,
+e.g. `"Hyderabad"`, `"Goa"`, `"Paris, France"`, `"Goa, Philippines"`. If a
+country/state is given and nothing matches it, the tool reports the location
+as not found rather than guessing somewhere else.
 
 ## Requirements
 
